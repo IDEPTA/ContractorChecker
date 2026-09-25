@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\Filament;
+namespace App\Shared\Providers\Filament;
 
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -31,8 +31,14 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            ->discoverResources(
+                in: app_path('Shared/Providers/Filament/Resources'),
+                for: 'App\\Shared\\Providers\\Filament\\Resources',
+            )
+            ->discoverPages(
+                app_path('Shared/Providers/Filament/Pages'),
+                for: 'App\\Shared\\Providers\\Filament\\Pages',
+            )
             ->pages([
                 Dashboard::class,
             ])

@@ -1,6 +1,7 @@
 <?php
 
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\Filament\AdminPanelProvider::class,
+    App\Shared\Providers\AppServiceProvider::class,
+    App\Shared\Providers\Filament\AdminPanelProvider::class,
 ];
