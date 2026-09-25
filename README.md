@@ -47,6 +47,7 @@ cd contractor-check
 cp .env.example .env
 docker compose up -d
 docker compose exec app php artisan migrate --seed
+docker compose exec app php artisan make:filament-user
 ```
  
 После запуска доступны:
