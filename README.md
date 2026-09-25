@@ -21,9 +21,9 @@
 | Кэш / очереди | Redis, Laravel Queue, Horizon |
 | Хранилище файлов | S3 (MinIO в dev-окружении) |
 | Внешний API | DaData |
-| Админка | Filament / Orchid |
+| Админка | Filament |
 | Инфраструктура | Docker, Docker Compose |
-| Тесты | PHPUnit / Pest |
+| Тесты | PHPUnit  |
  
 ## Архитектура
  
@@ -55,6 +55,9 @@ docker compose exec app php artisan migrate --seed
 - Админка: `http://localhost:8000/admin`
 - Horizon (мониторинг очередей): `http://localhost:8000/horizon`
 - MinIO (S3): `http://localhost:9001`
+- pgAdmin4: `http://localhost:5050/`
+- Redis: `http://localhost:8081`
+
 ## Тестирование
  
 ```bash
