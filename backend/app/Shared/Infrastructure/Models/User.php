@@ -2,8 +2,7 @@
 
 namespace App\Shared\Infrastructure\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use App\Notifications\Infrastructure\Models\Notification;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,5 +27,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

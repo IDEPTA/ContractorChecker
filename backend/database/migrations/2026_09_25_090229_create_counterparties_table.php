@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('counterparties', function (Blueprint $table) {
-            $table->uuid();
+            $table->uuid('id')->primary();
             $table->string('inn')->unique();
             $table->string('ogrn')->nullable();
             $table->string('kpp')->nullable();
