@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->uuid();
+            $table->uuid('id')->primary();
             $table->string('disk');
             $table->string('path');
             $table->string('original_name')->nullable();
