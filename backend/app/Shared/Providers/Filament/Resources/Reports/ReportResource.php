@@ -20,9 +20,15 @@ class ReportResource extends Resource
 {
     protected static ?string $model = Report::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentText;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $navigationLabel = 'Отчеты';
+
+    protected static ?string $modelLabel = 'Отчеты';
+
+    protected static ?string $pluralModelLabel = 'Отчеты';
 
     public static function form(Schema $schema): Schema
     {
