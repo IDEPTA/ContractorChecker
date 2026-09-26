@@ -20,9 +20,15 @@ class CounterpartyResource extends Resource
 {
     protected static ?string $model = Counterparty::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ChartBar;
 
     protected static ?string $recordTitleAttribute = 'inn';
+
+    protected static ?string $navigationLabel = 'Снапшоты контрагентов';
+
+    protected static ?string $modelLabel = 'Снапшоты контрагентов';
+
+    protected static ?string $pluralModelLabel = 'Снапшоты контрагентов';
 
     public static function form(Schema $schema): Schema
     {
