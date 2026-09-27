@@ -2,24 +2,18 @@
 
 namespace App\Contractors\Domain\Events;
 
-use App\Contractors\Infrastructure\Models\Counterparty;
-use Illuminate\Broadcasting\Channel;
+use App\Contractors\Application\DTO\CounterpartyDto;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CounterpartyDataFetched
+class CounterpartySelected
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct(
-        public readonly Counterparty $counterparty
+        public readonly CounterpartyDto $counterparty,
     ) {}
 
     /**

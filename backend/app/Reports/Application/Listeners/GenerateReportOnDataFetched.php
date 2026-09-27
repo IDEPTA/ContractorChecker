@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Notifications\Listeners;
+namespace App\Reports\Application\Listeners;
 
-use App\Events\ReportGenerated;
+use App\Contractors\Domain\Events\CounterpartyDataFetched;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class NotifyUserOnReportGenerated
+class GenerateReportOnDataFetched implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -19,7 +18,7 @@ class NotifyUserOnReportGenerated
     /**
      * Handle the event.
      */
-    public function handle(ReportGenerated $event): void
+    public function handle(CounterpartyDataFetched $event): void
     {
         //
     }
