@@ -14,6 +14,7 @@ class CounterpartySelected
 
     public function __construct(
         public readonly CounterpartyDto $counterparty,
+        public readonly int $user_id,
     ) {}
 
     /**
