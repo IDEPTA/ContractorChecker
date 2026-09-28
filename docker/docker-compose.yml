@@ -4,6 +4,7 @@ services:
     build:
       context: ../backend
       dockerfile: ../docker/Dockerfile
+    user: "1000:1000"
     command: >
       sh -c '
         mkdir -p /var/www/html/storage/framework/views &&
@@ -24,6 +25,7 @@ services:
     build:
       context: ../backend
       dockerfile: ../docker/Dockerfile
+    user: "1000:1000"
     command: >
       sh -c '
         mkdir -p /var/www/html/storage/framework/views &&
