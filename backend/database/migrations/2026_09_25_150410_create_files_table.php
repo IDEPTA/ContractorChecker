@@ -13,16 +13,25 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->uuid('id')->primary();
+
             $table->string('disk');
             $table->string('path');
             $table->string('original_name')->nullable();
             $table->string('mime')->nullable();
             $table->float('size')->nullable();
             $table->string('hash')->nullable();
+
             $table->string('model_type')->nullable();
             $table->uuid('model_id')->nullable();
-            $table->uuid('created_by')->nullable();
+
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
             $table->timestamps();
+
+            $table->index(['model_type', 'model_id']);
         });
     }
 
