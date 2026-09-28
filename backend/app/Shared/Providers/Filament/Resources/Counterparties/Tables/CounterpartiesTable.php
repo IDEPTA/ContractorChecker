@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -15,16 +16,63 @@ class CounterpartiesTable
     {
         return $table
             ->columns([
-                TextColumn::make('inn')->label('ИНН'),
-                TextColumn::make('ogrn')->label('ОГРН'),
-                TextColumn::make('short_name')->label('Краткое наименование'),
-                TextColumn::make('status')->label('Статус'),
-                TextColumn::make('registration_date')->label('Дата регистрации'),
-                TextColumn::make('liquidation_date')->label('Дата ликвидации'),
+                TextColumn::make('inn')
+                    ->label('ИНН')
+                    ->copyable()
+                    ->copyMessage('ИНН скопирован')
+                    ->fontFamily('mono')
+                    ->weight(FontWeight::Medium)
+                    ->sortable(),
+
+                TextColumn::make('ogrn')
+                    ->label('ОГРН')
+                    ->copyable()
+                    ->copyMessage('ОГРН скопирован')
+                    ->fontFamily('mono')
+                    ->weight(FontWeight::Medium)
+                    ->sortable(),
+
+                TextColumn::make('short_name')
+                    ->label('Краткое наименование')
+                    ->weight(FontWeight::Medium)
+                    ->searchable()
+                    ->sortable()
+                    ->limit(40)
+                    ->tooltip(fn($state) => $state),
+
+                TextColumn::make('status')
+                    ->label('Статус')
+                    ->badge()
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'ACTIVE' => 'Действует',
+                        'LIQUIDATING' => 'Ликвидируется',
+                        'LIQUIDATED' => 'Ликвидирован',
+                        'REORGANIZING' => 'Реорганизация',
+                        default => $state,
+                    })
+                    ->color(fn(string $state): string => match ($state) {
+                        'ACTIVE' => 'success',
+                        'LIQUIDATING', 'REORGANIZING' => 'warning',
+                        'LIQUIDATED' => 'danger',
+                        default => 'gray',
+                    }),
+
+                TextColumn::make('registration_date')
+                    ->label('Дата регистрации')
+                    ->date('d.m.Y')
+                    ->icon('heroicon-m-calendar-days')
+                    ->color('gray')
+                    ->sortable(),
+
+                TextColumn::make('liquidation_date')
+                    ->label('Дата ликвидации')
+                    ->date('d.m.Y')
+                    ->icon('heroicon-m-calendar-days')
+                    ->color('gray')
+                    ->placeholder('—')
+                    ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),

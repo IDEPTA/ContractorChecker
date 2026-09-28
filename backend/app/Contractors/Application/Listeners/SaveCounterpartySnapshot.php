@@ -9,7 +9,8 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use RuntimeException;
 
-final class SaveCounterpartySnapshot implements ShouldQueue
+final class SaveCounterpartySnapshot
+// implements ShouldQueue
 {
     /**
      * Create the event listener.

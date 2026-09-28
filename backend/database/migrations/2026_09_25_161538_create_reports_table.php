@@ -13,12 +13,26 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->uuid('id')->primary();
+
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('status')->nullable();
-            $table->uuid('created_by')->nullable();
-            $table->uuid('file_id')->nullable();
-            $table->uuid('counterparty_id')->nullable();
+
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
+            $table->foreignUuid('file_id')
+                ->nullable()
+                ->constrained('files')
+                ->nullOnDelete();
+
+            $table->foreignUuid('counterparty_id')
+                ->nullable()
+                ->constrained('counterparties')
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
