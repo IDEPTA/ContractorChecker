@@ -9,8 +9,7 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use RuntimeException;
 
-final class SaveCounterpartySnapshot
-// implements ShouldQueue
+final class SaveCounterpartySnapshot implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -20,6 +19,7 @@ final class SaveCounterpartySnapshot
     public function handle(CounterpartySelected $event): void
     {
         try {
+            $user_id = $event->user_id;
             $counterparty = Counterparty::create([
                 'inn' => $event->counterparty->inn,
                 'ogrn' => $event->counterparty->ogrn,
@@ -41,7 +41,10 @@ final class SaveCounterpartySnapshot
                 'websites' => $event->counterparty->websites,
             ]);
 
-            CounterpartyDataFetched::dispatch($counterparty);
+            CounterpartyDataFetched::dispatch(
+                $counterparty,
+                $user_id
+            );
         } catch (Exception $e) {
             if ($e->getCode() === '23505') {
                 throw new RuntimeException('Такой контрагент уже существует.', previous: $e);

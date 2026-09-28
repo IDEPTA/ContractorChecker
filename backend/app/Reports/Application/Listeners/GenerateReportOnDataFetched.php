@@ -6,8 +6,7 @@ use App\Contractors\Domain\Events\CounterpartyDataFetched;
 use App\Reports\Application\Actions\GenerateReport;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class GenerateReportOnDataFetched
-//  implements ShouldQueue
+class GenerateReportOnDataFetched implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,6 +21,7 @@ class GenerateReportOnDataFetched
     public function handle(CounterpartyDataFetched $event): void
     {
         $counterparty = $event->counterparty;
-        $this->generateReport->handle($counterparty);
+        $user_id = $event->user_id;
+        $this->generateReport->handle($counterparty, $user_id);
     }
 }

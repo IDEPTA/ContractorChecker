@@ -3,11 +3,8 @@
 namespace App\Contractors\Domain\Events;
 
 use App\Contractors\Infrastructure\Models\Counterparty;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -19,7 +16,8 @@ class CounterpartyDataFetched
      * Create a new event instance.
      */
     public function __construct(
-        public readonly Counterparty $counterparty
+        public readonly Counterparty $counterparty,
+        public readonly int $user_id
     ) {}
 
     /**
