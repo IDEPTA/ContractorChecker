@@ -13,19 +13,22 @@ final class GenerateReport
         private readonly PdfReportGenerator $pdfReportGenerator,
     ) {}
 
-    public function handle(Counterparty $counterparty): void
-    {
-        DB::transaction(function () use ($counterparty) {
+    public function handle(
+        Counterparty $counterparty,
+        int $user_id
+    ): void {
+        DB::transaction(function () use ($counterparty, $user_id) {
             $report = Report::create([
                 'name' => "Отчёт по {$counterparty->inn}",
                 'description' => 'Отчёт о контрагенте',
                 'status' => 'processing',
                 'counterparty_id' => $counterparty->id,
-                'created_by' => auth()->id(),
+                'created_by' => $user_id,
             ]);
 
             $file = $this->pdfReportGenerator->generate(
                 $counterparty->toArray(),
+                $user_id
             );
 
             $report->update([

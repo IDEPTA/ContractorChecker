@@ -16,7 +16,7 @@ class PdfReportGenerator
         private readonly FileStorage $fileStorage,
         private readonly FileService $fileService,
     ) {}
-    public function generate(array $data): File
+    public function generate(array $data, int $user_id): File
     {
         $pdf = Pdf::loadView('reports.pdf.contractor-report', [
             'data' => $data,
@@ -43,7 +43,7 @@ class PdfReportGenerator
         $file =  $this->fileService->createFromStoredPath(
             $path,
             null,
-            auth()->id(),
+            $user_id,
             's3',
             [
                 'original_name' => sprintf('report_%s.pdf', $data['id']),
