@@ -1,0 +1,436 @@
+openapi: 3.0.3
+info:
+  title: ContractorChecker API
+  version: 1.0.0
+  description: API для контрагентов и отчётов.
+servers:
+  - url: http://localhost:8000/api
+    description: Локальный сервер
+tags:
+  - name: Контрагенты
+  - name: Отчёты
+paths:
+  /contractors:
+    post:
+      tags:
+        - Контрагенты
+      summary: Получить список контрагентов
+      description: Возвращает контрагентов вместе с их отчётами. Фильтры и сортировка передаются в JSON-теле.
+      operationId: getContractors
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterpartyQuery'
+            examples:
+              filterAndSort:
+                summary: Поиск активных контрагентов по названию
+                value:
+                  filter:
+                    search_query: Сбербанк
+                    status: ACTIVE
+                  sort:
+                    full_name: asc
+      responses:
+        '200':
+          description: Список контрагентов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Counterparty'
+              example:
+                - id: 01a120eb-3176-7275-91fe-86ca2ac33add
+                  inn: '7707083893'
+                  ogrn: '1027700132195'
+                  kpp: '773601001'
+                  full_name: ПУБЛИЧНОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО "СБЕРБАНК РОССИИ"
+                  short_name: ПАО СБЕРБАНК
+                  status: ACTIVE
+                  registration_date: '1991-06-20T00:00:00.000000Z'
+                  liquidation_date: null
+                  address: г Москва, ул Вавилова, д 19
+                  okved_main_code: '64.19'
+                  okved_main_name: null
+                  employees_count: null
+                  founders: []
+                  managers: []
+                  okveds: []
+                  phones: []
+                  emails: []
+                  websites: []
+                  created_at: '2026-10-09T13:47:26.000000Z'
+                  updated_at: '2026-10-09T13:47:26.000000Z'
+                  reports:
+                    - id: 01a120eb-319d-70c3-afdb-d21580e729e8
+                      name: Отчёт по 7707083893
+                      description: Отчёт о контрагенте
+                      status: completed
+                      created_by: 1
+                      file_id: 01a120eb-334f-7347-8d59-667f53c18d79
+                      counterparty_id: 01a120eb-3176-7275-91fe-86ca2ac33add
+                      created_at: '2026-10-09T13:47:27.000000Z'
+                      updated_at: '2026-10-09T13:47:27.000000Z'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /contractors/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags:
+        - Контрагенты
+      summary: Получить контрагента по ID
+      operationId: getCounterpartyById
+      responses:
+        '200':
+          description: Контрагент с вложенными отчётами
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Counterparty'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      tags:
+        - Контрагенты
+      summary: Удалить контрагента
+      operationId: deleteCounterparty
+      responses:
+        '200':
+          description: Результат удаления
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - deleted
+                properties:
+                  deleted:
+                    type: boolean
+              example:
+                deleted: true
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /reports:
+    post:
+      tags:
+        - Отчёты
+      summary: Получить список отчётов
+      description: Возвращает отчёты с файлами, контрагентами и авторами. Фильтры и сортировка передаются в JSON-теле.
+      operationId: getReports
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportQuery'
+            examples:
+              filterAndSort:
+                summary: Поиск завершённых отчётов
+                value:
+                  filter:
+                    search_query: Сбербанк
+                    status: completed
+                  sort:
+                    created_at: desc
+      responses:
+        '200':
+          description: Список отчётов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /reports/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags:
+        - Отчёты
+      summary: Получить отчёт по ID
+      operationId: getReportById
+      responses:
+        '200':
+          description: Отчёт с файлом, контрагентом и автором
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      tags:
+        - Отчёты
+      summary: Удалить отчёт
+      operationId: deleteReport
+      responses:
+        '200':
+          description: Результат удаления
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        '500':
+          $ref: '#/components/responses/ServerError'
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: UUID сущности
+      schema:
+        type: string
+        format: uuid
+  responses:
+    NotFound:
+      description: Сущность не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CounterpartyQuery:
+      type: object
+      properties:
+        filter:
+          type: object
+          description: Все указанные фильтры объединяются условием AND. search_query ищет частичное совпадение в ИНН, ОГРН, КПП и названиях.
+          properties:
+            search_query:
+              type: string
+              description: Подстрока для поиска по inn, ogrn, kpp, full_name и short_name.
+            status:
+              type: string
+              description: Точное значение статуса контрагента.
+            registration_date:
+              type: string
+              format: date
+              description: Точная дата регистрации.
+            liquidation_date:
+              type: string
+              format: date
+              description: Точная дата ликвидации.
+            okved_main_code:
+              type: string
+              description: Подстрока основного кода ОКВЭД.
+          additionalProperties: false
+        sort:
+          type: object
+          description: Сортировка по одному или нескольким полям; значение каждого поля — asc или desc.
+          properties:
+            inn:
+              $ref: '#/components/schemas/SortDirection'
+            ogrn:
+              $ref: '#/components/schemas/SortDirection'
+            kpp:
+              $ref: '#/components/schemas/SortDirection'
+            full_name:
+              $ref: '#/components/schemas/SortDirection'
+            short_name:
+              $ref: '#/components/schemas/SortDirection'
+            status:
+              $ref: '#/components/schemas/SortDirection'
+            registration_date:
+              $ref: '#/components/schemas/SortDirection'
+            liquidation_date:
+              $ref: '#/components/schemas/SortDirection'
+            okved_main_code:
+              $ref: '#/components/schemas/SortDirection'
+          additionalProperties: false
+      additionalProperties: false
+    ReportQuery:
+      type: object
+      properties:
+        filter:
+          type: object
+          description: Все указанные фильтры объединяются условием AND. search_query ищет частичное совпадение в названии и описании.
+          properties:
+            search_query:
+              type: string
+              description: Подстрока для поиска по name и description.
+            status:
+              type: string
+              description: Точное значение статуса отчёта.
+          additionalProperties: false
+        sort:
+          type: object
+          description: Сортировка по одному или нескольким полям; значение каждого поля — asc или desc.
+          properties:
+            created_at:
+              $ref: '#/components/schemas/SortDirection'
+            name:
+              $ref: '#/components/schemas/SortDirection'
+            status:
+              $ref: '#/components/schemas/SortDirection'
+          additionalProperties: false
+      additionalProperties: false
+    SortDirection:
+      type: string
+      enum:
+        - asc
+        - desc
+    Counterparty:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        inn:
+          type: string
+          nullable: true
+        ogrn:
+          type: string
+          nullable: true
+        kpp:
+          type: string
+          nullable: true
+        full_name:
+          type: string
+          nullable: true
+        short_name:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        registration_date:
+          type: string
+          format: date-time
+          nullable: true
+        liquidation_date:
+          type: string
+          format: date-time
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        okved_main_code:
+          type: string
+          nullable: true
+        okved_main_name:
+          type: string
+          nullable: true
+        employees_count:
+          type: integer
+          nullable: true
+        founders:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        managers:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        okveds:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        phones:
+          type: array
+          items:
+            type: string
+        emails:
+          type: array
+          items:
+            type: string
+        websites:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportSummary'
+    ReportSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        created_by:
+          type: integer
+          nullable: true
+        file_id:
+          type: string
+          format: uuid
+          nullable: true
+        counterparty_id:
+          type: string
+          format: uuid
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Report:
+      allOf:
+        - $ref: '#/components/schemas/ReportSummary'
+        - type: object
+          properties:
+            file:
+              type: object
+              nullable: true
+              additionalProperties: true
+            counterparty:
+              type: object
+              nullable: true
+              additionalProperties: true
+            creator:
+              type: object
+              nullable: true
+              additionalProperties: true
+    Error:
+      type: object
+      required:
+        - message
+        - success
+      properties:
+        message:
+          type: string
+        success:
+          type: boolean
+          enum:
+            - false

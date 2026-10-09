@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Reports\Http;
+namespace App\Reports\Http\Controllers;
 
 use App\Reports\Infrastructure\Models\Report;
 use Illuminate\Support\Facades\Storage;

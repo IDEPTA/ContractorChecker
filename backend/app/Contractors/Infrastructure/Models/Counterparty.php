@@ -2,14 +2,15 @@
 
 namespace App\Contractors\Infrastructure\Models;
 
-use App\Reports\Infrastructure\Models\Reports;
+use App\Reports\Infrastructure\Models\Report;
+use App\Shared\Traits\Filterable;
+use App\Shared\Traits\Sortable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 class Counterparty extends Model
 {
-    use HasUuids;
+    use HasUuids, Filterable, Sortable;
 
     protected $fillable = [
         'inn',
