@@ -5,13 +5,15 @@ namespace App\Reports\Infrastructure\Models;
 use App\Contractors\Infrastructure\Models\Counterparty;
 use App\Shared\Infrastructure\Models\File;
 use App\Shared\Infrastructure\Models\User;
+use App\Shared\Traits\Filterable;
+use App\Shared\Traits\Sortable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Report extends Model
 {
-    use HasUuids;
+    use HasUuids, Filterable, Sortable;
 
     protected $fillable = [
         'name',
