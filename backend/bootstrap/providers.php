@@ -1,11 +1,10 @@
 <?php
 
-use App\Contractors\ContractorServiceProvider;
-use App\Reports\ReportServiceProvider;
-
 return [
-    ContractorServiceProvider::class,
-    ReportServiceProvider::class,
+    App\Contractors\ContractorServiceProvider::class,
+    App\Reports\ReportServiceProvider::class,
+    App\Authentication\AuthServiceProvider::class,
     App\Shared\Providers\AppServiceProvider::class,
     App\Shared\Providers\Filament\AdminPanelProvider::class,
+
 ];

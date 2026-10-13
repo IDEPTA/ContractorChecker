@@ -2,11 +2,12 @@
 
 namespace App\Shared\Http\Resources;
 
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class ErrorResource extends JsonResource
 {
@@ -30,6 +31,10 @@ class ErrorResource extends JsonResource
      */
     protected function statusCode(): int
     {
+        if ($this->resource instanceof AuthenticationException) {
+            return 401;
+        }
+
         if ($this->resource instanceof ModelNotFoundException) {
             return 404;
         }
