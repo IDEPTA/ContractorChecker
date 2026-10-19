@@ -9,9 +9,11 @@ use App\Shared\Infrastructure\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class OutboundNotification extends Model
 {
     use HasUuids;
+
+    protected $table = 'outbound_notifications';
 
     protected $fillable = [
         'user_id',

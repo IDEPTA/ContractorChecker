@@ -1,6 +1,6 @@
 # Contractor Check — сервис проверки контрагентов
  
-Сервис для проверки контрагентов по ИНН: получение данных из DaData, асинхронная генерация PDF-отчёта, загрузка в S3 и уведомление пользователя по завершении обработки.
+Сервис для проверки контрагентов по ИНН: получение данных из DaData, асинхронная генерация PDF-отчёта с аналитикой от AI Gemini, загрузка в S3 и уведомление пользователя по завершении обработки. 
  
 Проект построен на **Domain-Driven Design** с разделением на bounded contexts, взаимодействующими через доменные события.
  
@@ -39,15 +39,23 @@
 - **Adapter** — интеграция с DaData через `CounterpartyProviderInterface`
 - **Domain Events / Observer** — взаимодействие между bounded contexts
 
+## AI-генерация отчёта
+
+Для краткого аналитического описания контрагента используется Google Gemini через Laravel AI: модель `gemini-3.8-flash` обрабатывает сохранённые данные контрагента, а результат попадает в запись отчёта и PDF. Генерация запускается в очереди. Если Gemini недоступен или возвращает ошибку, она записывается в Laravel log, а формирование PDF продолжается с сообщением о недоступности AI-описания.
+
+Для работы функции добавьте собственный `GEMINI_API_KEY` в `backend/.env`. Не коммитьте API-ключи в репозиторий.
+
 ## Запуск проекта
+
+Для локального входа в Filament сидер создаёт пользователя `Admin`: `admin@example.com` / `password`. После первого входа смените пароль. Не используйте эти учетные данные в production.
  
 ```bash
 git clone <repo>
 cd contractor-check
-cp .env.example .env
-docker compose up -d
-docker compose exec app php artisan migrate --seed
-docker compose exec app php artisan make:filament-user
+cp backend/.env.example backend/.env
+docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/docker-compose.yml exec app php artisan key:generate
+docker compose -f docker/docker-compose.yml exec app php artisan migrate --seed
 ```
  
 После запуска доступны:
@@ -62,7 +70,7 @@ docker compose exec app php artisan make:filament-user
 ## Тестирование
  
 ```bash
-docker compose exec app php artisan test
+docker compose -f docker/docker-compose.yml exec app php artisan test
 ```
  
 Доменная логика (Value Objects) покрыта unit-тестами без обращения к БД. API-эндпоинты покрыты feature-тестами.

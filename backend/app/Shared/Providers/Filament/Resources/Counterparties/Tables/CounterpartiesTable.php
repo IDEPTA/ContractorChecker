@@ -2,10 +2,14 @@
 
 namespace App\Shared\Providers\Filament\Resources\Counterparties\Tables;
 
+use App\Contractors\Domain\Events\CounterpartyDataFetched;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -74,8 +78,31 @@ class CounterpartiesTable
             ])
             ->filters([])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    Action::make('generate')
+                        ->label('Сгенерировать PDF')
+                        ->action(function ($record) {
+                            if ($record->reports->count() === 0) {
+                                $user = auth()->user();
+                                // TODO создать новый слушатель и эвент, чтобы не нарушать бизнес логику
+                                CounterpartyDataFetched::dispatch($record, $user);
+
+                                Notification::make()
+                                    ->title('Формирование отчетов запущенно')
+                                    ->body('Готовый отчет появиться в соответствующем разделе')
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('Отчет уже сформирован')
+                                    ->danger()
+                                    ->send();
+                            }
+                        })
+                        ->icon('heroicon-m-document-text'),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
