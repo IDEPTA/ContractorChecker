@@ -2,7 +2,7 @@
 
 namespace App\Shared\Infrastructure\Models;
 
-use App\Notifications\Infrastructure\Models\Notification;
+use App\Notifications\Infrastructure\Models\OutboundNotification;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,8 +30,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function notifications()
+    public function outbound_notifications()
     {
-        return $this->hasMany(Notification::class);
+        return $this->hasMany(OutboundNotification::class);
     }
 }

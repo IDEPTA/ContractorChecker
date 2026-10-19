@@ -3,6 +3,7 @@
 namespace App\Contractors\Domain\Events;
 
 use App\Contractors\Infrastructure\Models\Counterparty;
+use App\Shared\Infrastructure\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -17,7 +18,7 @@ class CounterpartyDataFetched
      */
     public function __construct(
         public readonly Counterparty $counterparty,
-        public readonly int $user_id
+        public readonly User $user
     ) {}
 
     /**

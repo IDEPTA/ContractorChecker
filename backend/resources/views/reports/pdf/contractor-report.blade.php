@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
 
@@ -19,7 +20,10 @@
             line-height: 1.5;
         }
 
-        h1, h2, h3, p {
+        h1,
+        h2,
+        h3,
+        p {
             margin: 0;
         }
 
@@ -144,214 +148,267 @@
             font-size: 14px;
             font-weight: bold;
         }
+
+        ```css .ai-analysis {
+            margin-top: 12px;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid #64748b;
+        }
+
+        .ai-analysis-title {
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .ai-analysis-content {
+            color: #374151;
+            font-size: 10.5px;
+            line-height: 1.7;
+            font-weight: normal;
+            white-space: pre-line;
+            overflow-wrap: break-word;
+        }
+
+        .ai-analysis-note {
+            margin-top: 10px;
+            padding-top: 7px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 9px;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="header">
-    <div class="header-title">Отчёт о контрагенте</div>
-    <div class="header-subtitle">
-        Сформирован {{ now()->format('d.m.Y H:i') }}
+    <div class="header">
+        <div class="header-title">Отчёт о контрагенте</div>
+        <div class="header-subtitle">
+            Сформирован {{ now()->format('d.m.Y H:i') }}
+        </div>
     </div>
-</div>
 
-<div class="section">
-    <div class="section-title">Основная информация</div>
-
-    <table class="grid">
-        <tr>
-            <td class="card">
-                <div class="card-title">ИНН</div>
-                <div class="card-value">{{ $data['inn'] ?? '—' }}</div>
-            </td>
-
-            <td class="card">
-                <div class="card-title">ОГРН</div>
-                <div class="card-value">{{ $data['ogrn'] ?? '—' }}</div>
-            </td>
-
-            <td class="card">
-                <div class="card-title">КПП</div>
-                <div class="card-value">{{ $data['kpp'] ?? '—' }}</div>
-            </td>
-        </tr>
-    </table>
-
-    <table class="info-table">
-        <tr>
-            <td>Полное наименование</td>
-            <td>{{ $data['full_name'] ?? '—' }}</td>
-        </tr>
-
-        <tr>
-            <td>Краткое наименование</td>
-            <td>{{ $data['short_name'] ?? '—' }}</td>
-        </tr>
-
-        <tr>
-            <td>Статус</td>
-            <td>
-                @if(($data['status'] ?? null) === 'ACTIVE')
-                    <span class="status">Действующая</span>
-                @else
-                    <span class="status inactive">
-                        {{ $data['status'] ?? 'Неизвестен' }}
-                    </span>
-                @endif
-            </td>
-        </tr>
-
-        <tr>
-            <td>Дата регистрации</td>
-            <td>
-                {{ !empty($data['registration_date'])
-                    ? \Carbon\Carbon::parse($data['registration_date'])->format('d.m.Y')
-                    : '—'
-                }}
-            </td>
-        </tr>
-
-        <tr>
-            <td>Дата ликвидации</td>
-            <td>
-                {{ !empty($data['liquidation_date'])
-                    ? \Carbon\Carbon::parse($data['liquidation_date'])->format('d.m.Y')
-                    : '—'
-                }}
-            </td>
-        </tr>
-
-        <tr>
-            <td>Адрес</td>
-            <td>{{ $data['address'] ?? '—' }}</td>
-        </tr>
-    </table>
-</div>
-
-<div class="section">
-    <div class="section-title">Виды деятельности</div>
-
-    <table class="info-table">
-        <tr>
-            <td>Основной ОКВЭД</td>
-            <td>
-                @if(!empty($data['okved_main_code']))
-                    {{ $data['okved_main_code'] }}
-                    — {{ $data['okved_main_name'] }}
-                @else
-                    <span class="empty">Не указан</span>
-                @endif
-            </td>
-        </tr>
-
-        <tr>
-            <td>Количество сотрудников</td>
-            <td>{{ $data['employees_count'] ?? '—' }}</td>
-        </tr>
-    </table>
-
-    @if(!empty($data['okveds']))
-        <table class="list">
-            <thead>
-            <tr>
-                <th>Код</th>
-                <th>Наименование</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            @foreach($data['okveds'] as $okved)
-                <tr>
-                    <td>{{ $okved['code'] ?? '—' }}</td>
-                    <td>{{ $okved['name'] ?? '—' }}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    @endif
-</div>
-
-@if(!empty($data['founders']))
     <div class="section">
-        <div class="section-title">Учредители</div>
+        <div class="section-title">Основная информация</div>
 
-        <table class="list">
-            <thead>
+        <table class="grid">
             <tr>
-                <th>Наименование</th>
-                <th>Доля</th>
+                <td class="card">
+                    <div class="card-title">ИНН</div>
+                    <div class="card-value">{{ $data['inn'] ?? '—' }}</div>
+                </td>
+
+                <td class="card">
+                    <div class="card-title">ОГРН</div>
+                    <div class="card-value">{{ $data['ogrn'] ?? '—' }}</div>
+                </td>
+
+                <td class="card">
+                    <div class="card-title">КПП</div>
+                    <div class="card-value">{{ $data['kpp'] ?? '—' }}</div>
+                </td>
             </tr>
-            </thead>
-
-            <tbody>
-            @foreach($data['founders'] as $founder)
-                <tr>
-                    <td>{{ $founder['name'] ?? '—' }}</td>
-                    <td>{{ $founder['share'] ?? '—' }}</td>
-                </tr>
-            @endforeach
-            </tbody>
         </table>
-    </div>
-@endif
-
-@if(!empty($data['managers']))
-    <div class="section">
-        <div class="section-title">Руководители</div>
-
-        <table class="list">
-            <thead>
-            <tr>
-                <th>ФИО</th>
-                <th>Должность</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            @foreach($data['managers'] as $manager)
-                <tr>
-                    <td>{{ $manager['name'] ?? '—' }}</td>
-                    <td>{{ $manager['position'] ?? '—' }}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-@endif
-
-@if(!empty($data['phones']) || !empty($data['emails']) || !empty($data['websites']))
-    <div class="section">
-        <div class="section-title">Контактная информация</div>
 
         <table class="info-table">
-            @if(!empty($data['phones']))
-                <tr>
-                    <td>Телефоны</td>
-                    <td>{{ implode(', ', $data['phones']) }}</td>
-                </tr>
-            @endif
+            <tr>
+                <td>Полное наименование</td>
+                <td>{{ $data['full_name'] ?? '—' }}</td>
+            </tr>
 
-            @if(!empty($data['emails']))
-                <tr>
-                    <td>Email</td>
-                    <td>{{ implode(', ', $data['emails']) }}</td>
-                </tr>
-            @endif
+            <tr>
+                <td>Краткое наименование</td>
+                <td>{{ $data['short_name'] ?? '—' }}</td>
+            </tr>
 
-            @if(!empty($data['websites']))
-                <tr>
-                    <td>Сайты</td>
-                    <td>{{ implode(', ', $data['websites']) }}</td>
-                </tr>
-            @endif
+            <tr>
+                <td>Статус</td>
+                <td>
+                    @if (($data['status'] ?? null) === 'ACTIVE')
+                        <span class="status">Действующая</span>
+                    @else
+                        <span class="status inactive">
+                            {{ $data['status'] ?? 'Неизвестен' }}
+                        </span>
+                    @endif
+                </td>
+            </tr>
+
+            <tr>
+                <td>Дата регистрации</td>
+                <td>
+                    {{ !empty($data['registration_date'])
+                        ? \Carbon\Carbon::parse($data['registration_date'])->format('d.m.Y')
+                        : '—' }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Дата ликвидации</td>
+                <td>
+                    {{ !empty($data['liquidation_date']) ? \Carbon\Carbon::parse($data['liquidation_date'])->format('d.m.Y') : '—' }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Адрес</td>
+                <td>{{ $data['address'] ?? '—' }}</td>
+            </tr>
         </table>
     </div>
-@endif
 
-<div class="footer">
-    ContractorChecker · Отчёт сформирован автоматически
-</div>
+    <div class="section">
+        <div class="section-title">Виды деятельности</div>
+
+        <table class="info-table">
+            <tr>
+                <td>Основной ОКВЭД</td>
+                <td>
+                    @if (!empty($data['okved_main_code']))
+                        {{ $data['okved_main_code'] }}
+                        — {{ $data['okved_main_name'] }}
+                    @else
+                        <span class="empty">Не указан</span>
+                    @endif
+                </td>
+            </tr>
+
+            <tr>
+                <td>Количество сотрудников</td>
+                <td>{{ $data['employees_count'] ?? '—' }}</td>
+            </tr>
+        </table>
+
+        @if (!empty($data['okveds']))
+            <table class="list">
+                <thead>
+                    <tr>
+                        <th>Код</th>
+                        <th>Наименование</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($data['okveds'] as $okved)
+                        <tr>
+                            <td>{{ $okved['code'] ?? '—' }}</td>
+                            <td>{{ $okved['name'] ?? '—' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+    </div>
+
+    @if (!empty($data['founders']))
+        <div class="section">
+            <div class="section-title">Учредители</div>
+
+            <table class="list">
+                <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Доля</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($data['founders'] as $founder)
+                        <tr>
+                            <td>{{ $founder['name'] ?? '—' }}</td>
+                            <td>{{ $founder['share'] ?? '—' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
+    @if (!empty($data['managers']))
+        <div class="section">
+            <div class="section-title">Руководители</div>
+
+            <table class="list">
+                <thead>
+                    <tr>
+                        <th>ФИО</th>
+                        <th>Должность</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($data['managers'] as $manager)
+                        <tr>
+                            <td>{{ $manager['name'] ?? '—' }}</td>
+                            <td>{{ $manager['position'] ?? '—' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
+    @if (!empty($data['phones']) || !empty($data['emails']) || !empty($data['websites']))
+        <div class="section">
+            <div class="section-title">Контактная информация</div>
+
+            <table class="info-table">
+                @if (!empty($data['phones']))
+                    <tr>
+                        <td>Телефоны</td>
+                        <td>{{ implode(', ', $data['phones']) }}</td>
+                    </tr>
+                @endif
+
+                @if (!empty($data['emails']))
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ implode(', ', $data['emails']) }}</td>
+                    </tr>
+                @endif
+
+                @if (!empty($data['websites']))
+                    <tr>
+                        <td>Сайты</td>
+                        <td>{{ implode(', ', $data['websites']) }}</td>
+                    </tr>
+                @endif
+            </table>
+        </div>
+    @endif
+
+    <div class="section">
+        <div class="section-title">Краткий AI анализ</div>
+        <div>
+            @if (!empty($data['report_description']))
+                <div class="section">
+                    <div class="section-title">Краткий AI-анализ</div>
+
+                    <div class="ai-analysis">
+                        <div class="ai-analysis-title">
+                            Аналитическое описание контрагента
+                        </div>
+
+                        <div class="ai-analysis-content">{{ $data['report_description'] }}</div>
+
+                        <div class="ai-analysis-note">
+                            Сформировано автоматически на основе предоставленных данных.
+                            Не является юридическим заключением или гарантией надёжности контрагента.
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <div class="footer">
+        ContractorChecker · Отчёт сформирован автоматически
+    </div>
 
 </body>
+
 </html>

@@ -66,10 +66,11 @@ class Counterparty extends Page implements HasForms
 
     public function selectCounterparty(int $index): void
     {
+        $user = auth()->user();
         $counterparty = $this->counterparties[$index];
         CounterpartySelected::dispatch(
             $counterparty,
-            auth()->id()
+            $user
         );
 
         unset($this->counterparties[$index]);
