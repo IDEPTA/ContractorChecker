@@ -26,6 +26,7 @@ final class CounterpartyDto implements Wireable
         public readonly array $phones = [],
         public readonly array $emails = [],
         public readonly array $websites = [],
+        public readonly array $raw_data = []
     ) {}
 
     public static function fromArray(array $data): self
@@ -53,6 +54,7 @@ final class CounterpartyDto implements Wireable
             phones: $data['phones'] ?? [],
             emails: $data['emails'] ?? [],
             websites: $data['sites'] ?? [],
+            raw_data: $data ?? []
         );
     }
 
@@ -77,6 +79,7 @@ final class CounterpartyDto implements Wireable
             'phones' => $this->phones,
             'emails' => $this->emails,
             'websites' => $this->websites,
+            'raw_data' => $this->raw_data
         ];
     }
 
@@ -105,6 +108,7 @@ final class CounterpartyDto implements Wireable
             phones: $value['phones'] ?? [],
             emails: $value['emails'] ?? [],
             websites: $value['websites'] ?? [],
+            raw_data: $value['raw_data'] ?? []
         );
     }
 

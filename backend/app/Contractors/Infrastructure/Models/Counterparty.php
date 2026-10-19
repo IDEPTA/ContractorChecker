@@ -32,6 +32,8 @@ class Counterparty extends Model
         'phones',
         'emails',
         'websites',
+
+        'raw_data'
     ];
 
     protected $casts = [
@@ -44,6 +46,7 @@ class Counterparty extends Model
         'phones' => 'array',
         'emails' => 'array',
         'websites' => 'array',
+        'raw_data' => 'array',
     ];
 
     public function reports()

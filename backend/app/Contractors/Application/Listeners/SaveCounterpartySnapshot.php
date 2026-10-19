@@ -39,6 +39,7 @@ final class SaveCounterpartySnapshot implements ShouldQueue
                 'phones' => $event->counterparty->phones,
                 'emails' => $event->counterparty->emails,
                 'websites' => $event->counterparty->websites,
+                'raw_data' => $event->counterparty
             ]);
 
             CounterpartyDataFetched::dispatch(
