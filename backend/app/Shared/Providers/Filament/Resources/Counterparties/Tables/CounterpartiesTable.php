@@ -87,7 +87,7 @@ class CounterpartiesTable
                             if ($record->reports->count() === 0) {
                                 $user = auth()->user();
                                 // TODO создать новый слушатель и эвент, чтобы не нарушать бизнес логику
-                                CounterpartyDataFetched::dispatch($record, $user->id);
+                                CounterpartyDataFetched::dispatch($record, $user);
 
                                 Notification::make()
                                     ->title('Формирование отчетов запущенно')

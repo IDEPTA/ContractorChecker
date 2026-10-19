@@ -21,7 +21,7 @@ class GenerateReportOnDataFetched implements ShouldQueue
     public function handle(CounterpartyDataFetched $event): void
     {
         $counterparty = $event->counterparty;
-        $user_id = $event->user_id;
-        $this->generateReport->handle($counterparty, $user_id);
+        $user = $event->user;
+        $this->generateReport->handle($counterparty, $user);
     }
 }

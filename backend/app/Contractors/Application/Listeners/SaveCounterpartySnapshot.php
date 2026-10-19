@@ -16,10 +16,15 @@ final class SaveCounterpartySnapshot implements ShouldQueue
      */
     public function __construct() {}
 
+    /**
+     * @param CounterpartySelected $event
+     *
+     * @return void
+     */
     public function handle(CounterpartySelected $event): void
     {
         try {
-            $user_id = $event->user_id;
+            $user = $event->user;
             $counterparty = Counterparty::create([
                 'inn' => $event->counterparty->inn,
                 'ogrn' => $event->counterparty->ogrn,
@@ -44,7 +49,7 @@ final class SaveCounterpartySnapshot implements ShouldQueue
 
             CounterpartyDataFetched::dispatch(
                 $counterparty,
-                $user_id
+                $user
             );
         } catch (Exception $e) {
             if ($e->getCode() === '23505') {
