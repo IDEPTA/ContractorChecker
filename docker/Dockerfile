@@ -14,7 +14,7 @@ RUN apt-get update \
         intl \
         mbstring \
         pcntl \
-    && pecl install redis \
+    && pecl install redis-6.3.0 \
     && docker-php-ext-enable redis \
     && apt-get purge -y --auto-remove $PHPIZE_DEPS \
     && rm -rf /var/lib/apt/lists/*
